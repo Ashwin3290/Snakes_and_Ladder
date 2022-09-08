@@ -19,4 +19,7 @@ pip install pygame
 
 Steps to run
 ---
-* Keep 
+* Make sure the scripts folder and Snakes and ladder.py are in the same directory
+* Run the Snakes and ladder.py and u are ready to go.
+---
+**Feel free to point out issue or improvements with the code**
