@@ -65,7 +65,7 @@ def printdie(num,x,y):
     
 def newloc(piece,num):
     newloc=[]
-    if not location[piece]+num+1>100:
+    if not location[piece]+num>100:
         for i in range(num):
             newloc.append(location[piece]+i+1)
     if not newloc==[]:   
@@ -77,16 +77,15 @@ def newloc(piece,num):
         
     return newloc
 
-won=[]
 def iswon(turn,piece):
     labels={"r":"Red","b":"Blue","g":"Green","y":"Yellow"}
     if location[piece]==100:
         font1=pygame.font.SysFont('comicsans',20)
-        num=5-len(turn)
         won.append(piece)
+        num=len(won)
         msg1=font1.render(("#"+str(num)+" "+labels[piece]),1,(255,255,255))
         win.blit(msg1,(600,(50*num)))
-        win.blit(pieces[piece],700,(50*num))
+        win.blit(pieces[piece],(700,(50*num)))
     
     
 
@@ -259,11 +258,11 @@ win =pygame.display.set_mode((800,600))
 pygame.display.set_caption("Snakes and ladder")
 
 running=True
-turn=pieces.copy()
 
 lc=0 #all static point calculation is done at the first loop and then stored for later 
 
 while running:
+    won=[]
     for event in pygame.event.get() :
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -330,14 +329,13 @@ while running:
             if type(press)==int:
                 win.fill((0,0,0))
                 pieces=dict(itt.islice(pieces.items(), press+1))
-                # pieces=pieces[:press+1]
                 break
 
         pygame.display.update()
 
     for i in pieces:
         location[i]=1
-
+        
     #GAME
     run=True
     printdie(1,690,520)
@@ -376,7 +374,8 @@ while running:
         pygame.time.delay(50)
         pygame.display.update()
         lc=1 #Now the code will use the stored static points instead of calculating everytime
-
+    pygame.time.delay(1000)
+    win.fill((0,0,0))
     #GameOver
     run=True
     x=60
@@ -394,13 +393,14 @@ while running:
         font=pygame.font.SysFont('comicsans',30,True)
         msg=font.render("Game Over",1,(255,255,255))
         win.blit(msg,(300,40))
-        win.blit(pieces[i],(425,y1+50*(won.index(i))))
+        
 
         for i in won:
             text=str(won.index(i)+1)+"# "+labels[i]
             msg=font1.render(text,1,(255,255,0))
             y1=100
             win.blit(msg,(350,y1+50*(won.index(i))))
+            win.blit(pieces[i],(425,y1+50*(won.index(i))))
         mouse=pygame.mouse.get_pos()
 
         msg=font1.render("Play again",1,(0,0,0))
@@ -415,14 +415,14 @@ while running:
 
             press=buttonpress(buttons,mouse)
             if type(press)==int:
-                print("clicked ",press)
-            if press==0:
-                break
-            else:
-                running=False
-                break
+                if press==0:
+                    continue
+                else:
+                    running=False
+                    break
 
         pygame.display.update()
         pygame.time.delay(10)
+        win.fill((0,0,0))
  
 pygame.quit()
